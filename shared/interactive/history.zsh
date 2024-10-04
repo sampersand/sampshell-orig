@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+export HISTSIZE=100000 # how many lines to load into history originally
+export SAVEHIST=100000 # how many lines to save at the end
+setopt EXTENDED_HISTORY # more fancy history
+setopt HIST_ALLOW_CLOBBER # History saves commands as clobber commands
+setopt HIST_REDUCE_BLANKS # reduce extraneous blanks (sadly not at end oflien tho)
+setopt HIST_IGNORE_SPACE  # Don't record lines that start with spaces
+setopt HIST_NO_STORE      # Don't store `history` or `fc` commands
+# TODO: whatis append_history

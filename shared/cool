@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+
+echo $histchars
+histchars='!^%'
+^ls^
+% ls
+ls # 
+exit
+
+
+# You can use `|` to be OR in glob
+# echo (1|2)
+setopt NO_BG_NICE # dont make background jobs be a lower priority
+# look into nonotify
+echo /usr/bin/cat(:t)
+
+setopt AUTO_CD # lets you just automatically change dirs to directories

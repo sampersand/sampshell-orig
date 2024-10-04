@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+# Returns zero or nonzero depending on when on if it's in a repo.
+git rev-parse --is-inside-work-tree >&- 2>&-
