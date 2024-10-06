@@ -1,11 +1,13 @@
 #!/bin/zsh
 
+# emulate -L zsh
+
 if [[ $1 = -- ]]; then
 	shift
 elif [[ $1 = -h || $1 = --help ]] || [[ $# < 2 ]]; then
-	echo "usage: $0 source ... target_folder"
-	echo "  moves files from source into dst, in the form 'XX (#).ext'"
-	echo "  for duplicates"
+	eecho "usage: $0 source ... target_folder"
+	eecho "  moves files from source into dst, in the form 'XX (#).ext'"
+	eecho "  for duplicates"
 	return -1
 fi
 
@@ -22,7 +24,7 @@ function set_destionation_file () {
 	ext=$ext${source_file:e}
 
 	for (( i=2 ;; i++ )); do
-		destination_file="$target_folder/${source_file:r} ($i)$ext"
+		destination_file="$target_folder/${source_file:t:r} ($i)$ext"
 
 		[[ ! -e $destination_file ]] && return
 	done

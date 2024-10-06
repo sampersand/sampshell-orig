@@ -18,20 +18,23 @@ function ttouch () for file; do mkdir -p $file:h && touch $file; done
 function mkdircd () { mkdir -p $@ && cd $@ }
 alias cdmkdir=mkdircd
 alias cdm=mkdircd
+alias mkd='mkdir -p'
 
 alias touchd='mkdir -p' # alias incase i ever end up using it
 
-########################
-# Changing directories #
-########################
+# ########################
+# # Changing directories #
+# ########################
 
-# Changes to the dirname of a file
-function cdd () cd ${@:h}
+# # Changes to the dirname of a file
+# function cdd () cd ${@:h}
 
-# Changes to the user's temporary directory; if it doesn't exist, it's created.
-function cdtmp () mkdircd "${__SS_CFG_TEMPORARY_DIRECTORY=$HOME/tmp}"
+# # Changes to the user's temporary directory; if it doesn't exist, it's created.
+# function cdtmp () mkdircd "${__SS_CFG_TEMPORARY_DIRECTORY=$HOME/tmp}"
 
-alias cdtrash='cd ${__SS_CFG_TRASH_DIRECTORY?}'
+# alias cdtrash='cd ${__SS_CFG_TRASH_DIRECTORY?}'
+
+# # CD DIRS??
 
 alias ..='cd ..'
 alias ...='cd ../..'

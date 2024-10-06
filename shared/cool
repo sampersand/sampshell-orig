@@ -16,3 +16,11 @@ setopt NO_BG_NICE # dont make background jobs be a lower priority
 echo /usr/bin/cat(:t)
 
 setopt AUTO_CD # lets you just automatically change dirs to directories
+
+print -z print -z print This is a line # <-- `-z` pushes things onto the editing stack!!
+
+
+% pwd
+~/src/zsh-3.0.8/Src
+% cd 0.8 1.9
+~/src/zsh-3.1.9/Src

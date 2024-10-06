@@ -1,0 +1,35 @@
+#!/bin/zsh
+
+########################
+# Changing directories #
+########################
+
+# Changes to the dirname of a file
+function cdd () cd ${@:h}
+
+# Changes to the user's temporary directory; if it doesn't exist, it's created.
+function cdtmp () mkdircd "${__SS_CFG_TEMPORARY_DIRECTORY=$HOME/tmp}"
+
+alias cdtrash='cd ${__SS_CFG_TRASH_DIRECTORY?}'
+
+setopt AUTO_PUSHD   # All `cd`s change directories
+setopt CDABLE_VARS  # able to cd to diretories
+setopt PUSHD_SILENT # So annoying, just use `dir` if needed
+
+# Adds a base directory
+function add-named-dir () {
+	if [[ $1 = -h ]]; then
+		echo "usage: $0 [dir=PWD] [name=basename(dir)]" >&2
+		return -1
+	fi
+
+	local dir=${${1:-$PWD}:A}
+	local name=${2:-${dir:t}}
+	hash -d $name=$dir
+}
+
+function del-named-dir () unhash -d ${1:-${PWD:t}}
+function dirs () builtin dirs ${@:--v} 
+
+
+# AUTO_NAME_DIRS

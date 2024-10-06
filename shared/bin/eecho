@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+# Echos out the arguments to stderr.
+
+echo $@ >&2

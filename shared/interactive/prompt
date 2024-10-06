@@ -1,9 +1,72 @@
 #!/bin/zsh
 
+################################
+# Sets up prompt substitutions #
+################################
+
+# Options:
+# `ps1_show_username` - always show the `user@host``, even if there is no conflict.
+# `ps1_expected_username` - the expected username
+# `ps1_expected_hostname` - the expected hostname
+# `ps1_pwd_max_len` - max length for pwd, before it's truncated.
+# Note that if the username and hostname are expected, they wont be shown.
+
 setopt PROMPT_SUBST # allows you to use variable substitutions in prompts
 
-# RPS1 <-- lets you set stuff onthe right-hand-side of the screen
-if false; then
-	code=/some/directory/here
-	: ~code # <-- now you can use `%~` and it'll show `~code` as a base
+alias prp='print -P'
 
+_samp_shell_ps1_hostname_username () {
+    # If we always show the username, or either expected username or hostname are unset, then
+    # use just orange.
+    if [[ ${samp_shell_options[ps1_show_username]} || 
+            -z ${samp_shell_options[ps1_expected_username]} || 
+            -z ${samp_shell_options[ps1_expected_hostname]} ]]; then
+        echo -n ' %F{242}'
+    elif [[ $samp_shell_options[ps1_expected_username] == "$(print -P %n)" &&
+            $samp_shell_options[ps1_expected_hostname] == "$(print -P %m)" ]]; then
+        # Neither expected username nor hostname are empty, and theyre both correct, so just return.
+        return
+    else
+        echo -n ' %B%F{red}' # uh oh, there was a hostname problem!
+    fi
+
+    echo -n '%n@%m%b%f'
+}
+
+# PS1+='%F{cyan}%D{%_m\/%d %_I:%M:%S %p}%f' # time
+export PS1=
+PS1+='%B%F{blue}[%b'                                   # [
+PS1+='%F{cyan}%D{%_I:%M:%S %p}%f'                      #    time
+PS1+=' %U%!%u'                                         #    history
+PS1+='%B%F{blue} |%b%f'                                #    |
+PS1+=' %(?.%F{green}.%F{red})%?%f'                     #    prev-stat-code
+PS1+='%(1j. %F{166}(%j job%(2j.s.))%f.)'               #    [jobs, if more than one]
+PS1+='%(2L. %F{red}SHLVL=%L.)'                         #    [shellevel, if more than 1]
+PS1+='%B%F{blue}]%b%f'                                 # ]
+PS1+='$(_samp_shell_ps1_hostname_username)'            # user@host, optional
+PS1+='%${samp_shell_options[ps1_pwd_max_len]:-65}>..>' # (limit ~path limit len to ps1_pwd_max_len)
+PS1+=' %F{11}%~%f'  #                                  # ~path
+# PS1+='$(_samp_shell_ps1_git_branch)'
+PS1+='%<<'                                             # finish limit
+PS1+=' %F{043}$(_samp_shell_ps1_git_branch)%f'
+PS1+='%b %F{8}%#%f '                                   # ending %
+
+samp_shell_options[git_branch_pattern]='${samp_shell_options[git_branch_prefix]}/??-??-??/'
+
+function _samp_shell_ps1_git_branch {
+    local br=$(git branch --show-current)
+    echo '#'${br#${~${(e)samp_shell_options[git_branch_pattern]?}}}
+}
+
+function _samp_shell_rps1_git_status {
+    local stat=0
+    git status --porcelain | while IFS= read -r line; do
+        [[ $line[1] == ' ' ]] && (( stat |= 2 ))
+        [[ $line[2] == ' ' ]] && (( stat |= 1 ))
+        [[ $line[1] == '?' || $line[2] == '?' ]] && (( stat |= 4 ))
+    done
+    (( stat & 1 )) && echo -n '*'
+    (( stat & 2 )) && echo -n '+'
+    (( stat & 4 )) && echo -n '?'
+}
+# export RPS1='%B%F{cyan}$(_samp_shell_rps1_git_status) $(git branch --show-current)%f' # git branch
