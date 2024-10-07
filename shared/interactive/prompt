@@ -33,40 +33,48 @@ _samp_shell_ps1_hostname_username () {
     echo -n '%n@%m%b%f'
 }
 
-# PS1+='%F{cyan}%D{%_m\/%d %_I:%M:%S %p}%f' # time
-export PS1=
-PS1+='%B%F{blue}[%b'                                   # [
-PS1+='%F{cyan}%D{%_I:%M:%S %p}%f'                      #    time
-PS1+=' %U%!%u'                                         #    history
-PS1+='%B%F{blue} |%b%f'                                #    |
-PS1+=' %(?.%F{green}.%F{red})%?%f'                     #    prev-stat-code
-PS1+='%(1j. %F{166}(%j job%(2j.s.))%f.)'               #    [jobs, if more than one]
-PS1+='%(2L. %F{red}SHLVL=%L.)'                         #    [shellevel, if more than 1]
-PS1+='%B%F{blue}]%b%f'                                 # ]
-PS1+='$(_samp_shell_ps1_hostname_username)'            # user@host, optional
-PS1+='%${samp_shell_options[ps1_pwd_max_len]:-65}>..>' # (limit ~path limit len to ps1_pwd_max_len)
-PS1+=' %F{11}%~%f'  #                                  # ~path
-# PS1+='$(_samp_shell_ps1_git_branch)'
-PS1+='%<<'                                             # finish limit
-PS1+=' %F{043}$(_samp_shell_ps1_git_branch)%f'
-PS1+='%b %F{8}%#%f '                                   # ending %
+make_ps1 () {
+    local all=0
 
-samp_shell_options[git_branch_pattern]='${samp_shell_options[git_branch_prefix]}/??-??-??/'
+    # PS1+='%F{cyan}%D{%_m\/%d %_I:%M:%S %p}%f' # time
+    export PS1=
+    PS1+='%B%F{blue}[%b'                                   # [
+    PS1+='%F{cyan}%D{%_I:%M:%S %p}%f'                      #    time
+    PS1+=' %U%!%u'                                         #    history
+    PS1+='%B%F{blue} |%b%f'                                #    |
+    PS1+=' %(?.%F{green}.%F{red})%?%f'                     #    prev-stat-code
+    if [[ $all != 0 ]]; then
+        PS1+='%(1j. %F{166}(%j job%(2j.s.))%f.)'               #    [jobs, if more than one]
+    else
+        PS1+=' %F{166}(%j job%2(1j.%(2j.s.).s))%f'
+    fi
+    PS1+='%(2L. %F{red}SHLVL=%L.)'                         #    [shellevel, if more than 1]
+    PS1+='%B%F{blue}]%b%f'                                 # ]
+    PS1+='$(_samp_shell_ps1_hostname_username)'            # user@host, optional
+    PS1+='%${samp_shell_options[ps1_pwd_max_len]:-65}>..>' # (limit ~path limit len to ps1_pwd_max_len)
+    PS1+=' %F{11}%~%f'  #                                  # ~path
+    # PS1+='$(_samp_shell_ps1_git_branch)'
+    PS1+='%<<'                                             # finish limit
+    PS1+=' %F{043}$(_samp_shell_ps1_git_branch)%f'
+    PS1+='%b %F{8}%#%f '                                   # ending %
 
-function _samp_shell_ps1_git_branch {
-    local br=$(git branch --show-current)
-    echo '#'${br#${~${(e)samp_shell_options[git_branch_pattern]?}}}
+    samp_shell_options[git_branch_pattern]='${samp_shell_options[git_branch_prefix]}/??-??-??/'
 }
+    function _samp_shell_ps1_git_branch {
+        local br=$(git branch --show-current)
+        echo '#'${br#${~${(e)samp_shell_options[git_branch_pattern]?}}}
+    }
 
-function _samp_shell_rps1_git_status {
-    local stat=0
-    git status --porcelain | while IFS= read -r line; do
-        [[ $line[1] == ' ' ]] && (( stat |= 2 ))
-        [[ $line[2] == ' ' ]] && (( stat |= 1 ))
-        [[ $line[1] == '?' || $line[2] == '?' ]] && (( stat |= 4 ))
-    done
-    (( stat & 1 )) && echo -n '*'
-    (( stat & 2 )) && echo -n '+'
-    (( stat & 4 )) && echo -n '?'
-}
-# export RPS1='%B%F{cyan}$(_samp_shell_rps1_git_status) $(git branch --show-current)%f' # git branch
+    function _samp_shell_rps1_git_status {
+        local stat=0
+        git status --porcelain | while IFS= read -r line; do
+            [[ $line[1] == ' ' ]] && (( stat |= 2 ))
+            [[ $line[2] == ' ' ]] && (( stat |= 1 ))
+            [[ $line[1] == '?' || $line[2] == '?' ]] && (( stat |= 4 ))
+        done
+        (( stat & 1 )) && echo -n '*'
+        (( stat & 2 )) && echo -n '+'
+        (( stat & 4 )) && echo -n '?'
+    }
+
+    # export RPS1='%B%F{cyan}$(_samp_shell_rps1_git_status) $(git branch --show-current)%f' # git branch
