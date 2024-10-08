@@ -12,7 +12,7 @@ fi
 mkdir $personal_dir || return $?
 mkdir $personal_dir/bin || return $?
 
-echo "add-named-dir ${(Q)personal_dir} personal_dir"> $personal_dir/.zshrc
+echo "add-named-dir ${(Q)personal_dir} samp_shell_personal_dir"> $personal_dir/.zshrc
 echo "export PATH=\$PATH:${(Q)personal_dir}/bin" > $personal_dir/.zshenv
 
 echo "setup personal dir: $personal_dir"
