@@ -8,3 +8,7 @@ setopt HIST_REDUCE_BLANKS # reduce extraneous blanks (sadly not at end oflien th
 setopt HIST_IGNORE_SPACE  # Don't record lines that start with spaces
 setopt HIST_NO_STORE      # Don't store `history` or `fc` commands
 # TODO: whatis append_history
+
+function history () builtin history ${@:--20}
+alias h=history
+

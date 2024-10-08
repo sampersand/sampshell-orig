@@ -14,7 +14,7 @@ fi
 
 if [[ ! -d $trash_dir ]]; then
 	if [[ -e $trash_dir ]] then
-		echo "$0: Trash directory ${(q)trash_dir} exists but is a file" >&2
+		echo "$0: Trash directory ${(q)trash_dir} exists but is a not a directory" >&2
 		return 1
 	fi
 

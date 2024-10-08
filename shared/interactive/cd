@@ -25,10 +25,10 @@ function add-named-dir () {
 
 	local dir=${${1:-$PWD}:A}
 	local name=${2:-${dir:t}}
-	hash -d $name=$dir
+	builtin hash -d $name=$dir
 }
 
-function del-named-dir () unhash -d ${1:-${PWD:t}}
+function del-named-dir () builtin unhash -d ${1:-${PWD:t}}
 function dirs () builtin dirs ${@:--v} 
 
 

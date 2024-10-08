@@ -46,3 +46,7 @@ alias ....='cd ../../..'
 echo "todo: safety"
 
 alias purge='command rm -rfP'
+
+function symlink () {
+	ln -s ${1?need existing file name} ${2?need name of destination}
+}

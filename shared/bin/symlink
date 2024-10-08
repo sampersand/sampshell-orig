@@ -1,3 +1,0 @@
-#!/bin/zsh
-
-ln -s ${1?need existing file name} ${2?need name of destination}

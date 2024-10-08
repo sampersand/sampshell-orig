@@ -15,8 +15,7 @@ alias s=subl
 function ssubl () {
 	for file; do
 		if ! [[ -e $file ]]; then
-			mkdir -p $file:h
-			touch $file
+			mkdir -p $file:h && touch $file
 		fi
 	done
 
