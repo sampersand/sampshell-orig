@@ -15,4 +15,4 @@ for file in ${0:A:h}/interactive/*; do
 	source $file
 done
 
-source ${0:A:h}/config.zsh
+source ${0:A:h}/old/config.zsh
