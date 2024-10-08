@@ -1,28 +1,29 @@
-#!/bin/zsh
+#!/bin/sh
 
-local skip_string=x
+skip_string=x
 
-if [[ $1 = -- ]]; then
+if [ "$1" = -- ]; then
 	shift
-elif [[ $1 = -h || $1 = --help ]]; then
+elif [ "$1" = -h ] || [ "$1" = --help ]; then
 	echo "(fn=FUNCTION) $0 args ..."
 	echo "  This command executes 'fn' once for each arg as background"
 	echo "  job. Unless the variable 'parallelize_it_no_skip' has been"
 	echo "  set, if an arg is '$skip_string', neither it nor the previous arg will"
 	echo "  be executed. A special case is if '$skip_string' is the first arg, it"
 	echo "  will also be executed."
-	return -1
+	exit -1
 fi
 
-: ${fn?a function must be supplied}
-local should_skip=${parallelize_it_no_skip+1}
+: "${fn?a function must be supplied}"
+should_skip="${parallelize_it_no_skip+1}"
 # TODO: see if the function is executable?
 
-until [[ $# = 0 ]]; do
-	if [[ -z $should_skip && $2 = $skip_string ]]; then
+until [ $# = 0 ]; do
+	if [ -z "$should_skip" ] && [ "$2" = "$skip_string" ]; then
 		shift
 	else
-		$fn $1 &
+		"$fn" "$1" &
 	fi
+
 	shift
 done
