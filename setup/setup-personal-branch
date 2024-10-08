@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+local root=${samp_shell_root?missing root folder}
+local personal_dir=$root/personal
+
+if [[ -e $personal_dir ]]; then
+	read -q "?delete existing personal dir $personal_dir? [yN] " || return
+	echo
+	trash $personal_dir
+fi
+
+mkdir $personal_dir || return $?
+mkdir $personal_dir/bin || return $?
+
+echo "add-named-dir ${(Q)personal_dir} personal_dir"> $personal_dir/.zshrc
+echo "export PATH=\$PATH:${(Q)personal_dir}/bin" > $personal_dir/.zshenv
+
+echo "setup personal dir: $personal_dir"
+
