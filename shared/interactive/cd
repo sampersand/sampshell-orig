@@ -4,6 +4,8 @@
 # Changing directories #
 ########################
 
+# AUTO_NAME_DIRS
+
 # Changes to the dirname of a file
 function cdd () cd ${@:h}
 
@@ -30,6 +32,3 @@ function add-named-dir () {
 
 function del-named-dir () builtin unhash -d ${1:-${PWD:t}}
 function dirs () builtin dirs ${@:--v} 
-
-
-# AUTO_NAME_DIRS

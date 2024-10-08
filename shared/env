@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Add the shared bin at a minimum
+export PATH="$(dirname "$0")/bin:$PATH"
+
+[ -n "$ZSH_PROFILE" ] && source "$(dirname "$0")/.zshenv"

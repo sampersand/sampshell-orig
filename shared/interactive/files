@@ -18,7 +18,6 @@ function ttouch () for file; do mkdir -p $file:h && touch $file; done
 function mkdircd () { mkdir -p $@ && cd $@ }
 alias cdmkdir=mkdircd
 alias cdm=mkdircd
-alias mkd='mkdir -p'
 
 alias touchd='mkdir -p' # alias incase i ever end up using it
 
@@ -50,3 +49,8 @@ alias purge='command rm -rfP'
 function symlink () {
 	ln -s ${1?need existing file name} ${2?need name of destination}
 }
+
+
+## making stuff
+function mkd () mkdir -p $@
+function mkf () { mkdir -p ${@:h} && command touch $@ }
