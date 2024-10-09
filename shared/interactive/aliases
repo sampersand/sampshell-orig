@@ -1,7 +1,0 @@
-#!/bin/zsh
-
-# General-purpose aliases
-
-alias t=trash
-alias '%= '
-alias '$= '
