@@ -1,0 +1,56 @@
+#!/bin/zsh
+
+#################
+# Listing files #
+#################
+
+alias ls='ls -AhG' # Always print out `.` files, and for longform, human-readable sizes
+alias ll='ls -l'  # Shorthand for `ls -al`
+
+################################
+# Creating files / directories #
+################################
+
+# Same as `touch`, except it will create directories as needed.
+function ttouch () for file; do mkdir -p $file:h && touch $file; done
+
+# Same as `mkdir`, except you also cd to the newly-created directory
+function mkdircd () { mkdir -p $@ && cd $@ }
+alias cdmkdir=mkdircd
+alias cdm=mkdircd
+
+alias touchd='mkdir -p' # alias incase i ever end up using it
+
+# ########################
+# # Changing directories #
+# ########################
+
+# # Changes to the dirname of a file
+# function cdd () cd ${@:h}
+
+# # Changes to the user's temporary directory; if it doesn't exist, it's created.
+# function cdtmp () mkdircd "${__SS_CFG_TEMPORARY_DIRECTORY=$HOME/tmp}"
+
+# alias cdtrash='cd ${__SS_CFG_TRASH_DIRECTORY?}'
+
+# # CD DIRS??
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+##################
+# Deleting Stuff #
+##################
+echo "todo: safety"
+
+alias purge='command rm -rfP'
+
+function symlink () {
+	ln -s ${1?need existing file name} ${2?need name of destination}
+}
+
+
+## making stuff
+function mkd () mkdir -p $@
+function mkf () { mkdir -p ${@:h} && command touch $@ }
