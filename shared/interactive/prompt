@@ -30,24 +30,33 @@ function _samp_shell_ps1_hostname_username () {
 
 function _samp_shell_ps1_git_branch {
     local br=$(git branch --show-current)
-    echo '#'${br#${~${(e)samp_shell_ps1_options[git_branch_pattern]?}}}
+
+    if [[ $1 = 1 ]]; then
+        echo $br
+    else
+        echo '#'${br#${~${(e)2}}}
+    fi
 }
 
 function _samp_shell_rps1_git_status {
     local stat=0
+    local line
     git status --porcelain | while IFS= read -r line; do
         [[ $line[1] == ' ' ]] && (( stat |= 2 ))
         [[ $line[2] == ' ' ]] && (( stat |= 1 ))
         [[ $line[1] == '?' || $line[2] == '?' ]] && (( stat |= 4 ))
     done
-    (( stat & 1 )) && echo -n '*'
-    (( stat & 2 )) && echo -n '+'
+    (( stat & 1 )) && echo -n '+'
+    (( stat & 2 )) && echo -n '*'
     (( stat & 4 )) && echo -n '?'
+    # TODO: rebasing and stuff
 }
 
-
 function make-ps1 {
-    local -A opts=(--pwd-max-len 65)
+    local -A opts=(
+        --pwd-max-len 65
+        --branch-pattern '[[:alnum:]]##/??-??-??/'
+    )
 
     zparseopts -F -K -A opts \
         {h,-help}       \
@@ -64,8 +73,9 @@ function make-ps1 {
         echo '  -a,--all                    enable all PS1 conditionals'
         echo "     --pwd-max-len=LEN        max len for the pwd; defaults to $opts[--pwd-max-len]"
         echo '  -l,--show-login-info={0,1}  when 1, always show login info; when 0, never'
-        echo '  -U,--user,--username=NAME username to match against' # can use `whoami`
-        echo '  -H,--host,--hostname=NAME hostname to match against' # can use `hostname -s`
+        echo '  -U,--user,--username=NAME   username to match against' # can use `whoami`
+        echo '  -H,--host,--hostname=NAME    hostname to match against' # can use `hostname -s`
+        echo "     --branch-pattern=PAT     branch prefix pattern; default: ${opts[--branch-pattern]}"
         echo
         echo "If --login-info is empty, then the login username and hostname of the machine"
         echo "will be checked; if they're both as expected, the user@host field isn't printed"
@@ -108,14 +118,23 @@ function make-ps1 {
 
     # Add ~path, possibly limiting it if $pathlen is nonzero
     [[ $pathlen != 0 ]] && PS1+="%$pathlen>..>"
-    PS1+=' %F{11}%~%f'                                     # ~path
+    PS1+=' %F{11}';
+    if [[ $all = 1 ]]; then PS1+='%d'; else PS1+='%~'; fi # ~path
     [[ $pathlen != 0 ]] && PS1+='%<<'
 
     # Add git branch in
-    PS1+=' %F{043}$(_samp_shell_ps1_git_branch)%f'        # git branch
+    PS1+=" %F{043}\$(_samp_shell_ps1_git_branch $all ${(q)opts[--branch-pattern]})%f"        # git branch
+
+    # git status
+    PS1+='$(_samp_shell_rps1_git_status)'
 
     # Trailing %
-    PS1+='%b %F{8}%#%f '                                   # ending %
+    PS1+='%b %F{8}'
+
+    if [[ $all = 1 ]]; then
+        PS1+=$'\n'
+    fi
+    PS1+='%#%f '                                   # ending %
 }
 
 make-ps1
