@@ -2,10 +2,6 @@
 # Shell options that are used by just interactive zsh instances #
 #################################################################
 
-export -A samp_shell_options
-
-samp_shell_options[safety]=1
-
 ## Command line
 setopt INTERACTIVE_COMMENTS # I use this all the time
 setopt RC_QUOTES            # Let you do '' to mean a single `'` within a `'` string
@@ -16,3 +12,5 @@ setopt MAGIC_EQUAL_SUBST # Supplying `a=b` on the command line does `~`/`=` expa
 for file in ${0:A:h}/interactive/*; do
 	source $file
 done
+
+eval "reload () { source ${(Q)0:A:h}; echo reloaded ${(Q)0:A:h} }"
