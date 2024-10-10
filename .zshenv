@@ -7,3 +7,5 @@ setopt WARN_CREATE_GLOBAL # warn when accidentally creating global variables
 setopt WARN_NESTED_VAR    # same with nested locals
 
 source ${0:A:h}/shared/.zshenv
+
+eval "reload () { source ${(Q)0:A:h}; echo reloaded ${(Q)0:A:h} }"

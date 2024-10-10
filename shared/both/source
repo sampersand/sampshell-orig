@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+# Same as `source`, except only does it if the file exists.
+function source-optional () for file; do
+	[[ -e $file ]] && source $file
+done
+
+# Same as `source`, except warns if it doesn't exist.
+function source-or-warn () for file; do
+	if [[ -e $file ]]; then
+		source $file
+	else
+		warn "Unable to source file: $file"
+	fi
+done

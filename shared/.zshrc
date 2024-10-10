@@ -12,5 +12,3 @@ setopt MAGIC_EQUAL_SUBST # Supplying `a=b` on the command line does `~`/`=` expa
 for file in ${0:A:h}/interactive/*; do
 	source $file
 done
-
-eval "reload () { source ${(Q)0:A:h}; echo reloaded ${(Q)0:A:h} }"
