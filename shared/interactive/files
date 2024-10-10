@@ -1,0 +1,31 @@
+#!/bin/zsh
+
+#################################################################################
+# Options relating to the file system -- listing, creating, changing files/dirs #
+#################################################################################
+
+## Listing files
+alias ls='ls -AhG' # Always print out `.` files, and for longform, human-readable sizes
+alias ll='ls -l'   # Shorthand for `ls -al`
+
+function ttouch () for file; do  # Same as `touch`, except it will create directories as needed.
+	mkdir -p $file:h && touch $file
+done
+
+# Same as `mkdir`, except you also cd to the newly-created directory
+function mkdircd () { mkdir -p $@ && cd $@ }
+alias cdmkdir=mkdircd
+alias cdm=mkdircd
+
+alias touchd='mkdir -p' # alias incase i ever end up using it
+
+##################
+# Deleting Stuff #
+##################
+function symlink () {
+	ln -s ${1?need existing file name} ${2?need name of destination}
+}
+
+## making stuff
+function mkd () mkdir -p $@
+function mkf () { mkdir -p ${@:h} && command touch $@ }

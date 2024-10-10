@@ -18,3 +18,7 @@ alias cp='cp -i'
 alias rrm='builtin rm'
 alias mmv='builtin mv'
 alias ccp='builtin cp'
+
+## Purge deletes something entirely
+alias purge='command rm -riP'
+alias ppurge='command rm -rfP'

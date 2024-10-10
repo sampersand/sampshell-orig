@@ -36,3 +36,7 @@ function cdd () cd ${@:h} # Changes to the dirname of a file
 function cdme () mkdircd ~me
 function cdtmp () mkdircd ~tmp # Changes to the user's temporary directory; if it doesn't exist, it's created.
 function cdtrash () mkdircd ~trash
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
