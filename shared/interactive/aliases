@@ -8,3 +8,7 @@ alias rmm=rrm # An old alias I used to use and might do on accident
 
 alias t=trash # Shorthand to make sure I use it more.
 alias '%= ' '$= ' # Make sure an `%`/`$` at the beginning of a line will be ignored.
+
+
+alias s=subl
+alias ss=ssubl
