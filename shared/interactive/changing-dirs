@@ -1,8 +1,8 @@
 #!/bin/zsh
 
-########################
-# Changing directories #
-########################
+###########################################################
+# Options for changing directories, and named directories #
+###########################################################
 
 ## Options
 setopt AUTO_PUSHD        # All `cd`s push directories

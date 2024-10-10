@@ -5,3 +5,7 @@ function nargs () echo $#
 
 # I frequently use this.
 export words=/usr/share/dict/words
+
+#!/bin/zsh
+
+alias grep='grep --color=auto'
