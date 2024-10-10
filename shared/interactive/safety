@@ -1,0 +1,20 @@
+#!/bin/zsh
+
+############################################################
+# Make sure I don't do anything stupid on the command line #
+############################################################
+
+## Useful options
+setopt NO_CLOBBER    # Cannot use `>` to overwrite files; `>!`/`>|` needed.
+setopt CLOBBER_EMPTY # However, you can clobber empty files.
+setopt RM_STAR_WAIT  # Accidentally do `rm *`, wait 10s before doing it.
+
+## Override builtins with safer versions
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+
+## Add the originals in so you don't need to remember `-f`
+alias rrm='builtin rm'
+alias mmv='builtin mv'
+alias ccp='builtin cp'

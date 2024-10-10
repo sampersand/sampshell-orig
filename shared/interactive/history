@@ -1,0 +1,34 @@
+#!/bin/zsh
+
+## Set history argument sizes. I want them to be large so I can see them later.
+HISTSIZE=100000    # how many lines to load into history originally
+SAVEHIST=100000    # how many lines to save at the end
+
+## History options
+setopt EXTENDED_HISTORY   # more fancy history
+setopt HIST_ALLOW_CLOBBER # History saves commands as clobber commands
+setopt HIST_REDUCE_BLANKS # reduce extraneous blanks (sadly not at end of line tho)
+setopt HIST_IGNORE_SPACE  # Don't record lines that start with spaces
+setopt HIST_NO_STORE      # Don't store `history` or `fc` commands
+setopt HIST_FCNTL_LOCK    # We're on a modern operating system, dont use ad-hoc locking mechanisms
+setopt HIST_FIND_NO_DUPS  # Don't show dups when searching history
+setopt HIST_IGNORE_DUPS   # Only ignore dups if they are dups of the immediately preceding command
+
+## Set defaults for history, and add an alias
+function history () builtin history -i ${@:--20}
+alias h=history
+
+## Enable/Disable history. 
+alias disablehistory='function zshaddhistory() { return 1 }'
+alias enablehistory='unset -f zshaddhistory'
+
+function disable-history () {
+	fc -p
+	unset SAVEHIST HISTFILE
+	echo "disabling history isn't totally working just yet."
+	# SHELL_SESSION_HISTORY=0
+}
+
+function enable-history () {
+	fc -P
+}
