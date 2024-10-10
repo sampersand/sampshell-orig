@@ -1,0 +1,101 @@
+#!/bin/zsh
+
+return 
+################################
+# Sets up prompt substitutions #
+################################
+
+# Options:
+# `ps1_show_username` - always show the `user@host``, even if there is no conflict.
+# `ps1_expected_username` - the expected username
+# `ps1_expected_hostname` - the expected hostname
+# `ps1_pwd_max_len` - max length for pwd, before it's truncated.
+# Note that if the username and hostname are expected, they wont be shown.
+
+setopt PROMPT_SUBST # allows you to use variable substitutions in prompts
+
+typeset -gtx -A samp_shell_ps1_options
+
+samp_shell_ps1_options[pwd_max_len]=65
+samp_shell_ps1_options[show_username]=
+samp_shell_ps1_options[expected_hostname]=Sampbook-Pro
+samp_shell_ps1_options[expected_username]=sampersand
+
+alias prp='print -P'
+
+_samp_shell_ps1_hostname_username () {
+
+    # If show_username is 0, then never show it
+    if [[ ${samp_shell_ps1_options[show_username]} = 0 ]]; then
+        return
+    # If show_username is `, or either expected_username or expected_hostname is blank,
+    # then show the username in a light grey
+    elif [[ $1 = 1 || ${samp_shell_ps1_options[show_username]} = 1 ||
+            -z ${samp_shell_ps1_options[expected_username]} || 
+            -z ${samp_shell_ps1_options[expected_hostname]} ]]; then
+        echo -n ' %F{242}'
+    # If both expected_username and expected_hostname are correct, sho wnothing
+    elif [[ $samp_shell_ps1_options[expected_username] == "$(print -P %n)" &&
+            $samp_shell_ps1_options[expected_hostname] == "$(print -P %m)" ]]; then
+        # Neither expected username nor hostname are empty, and theyre both correct, so just return.
+        return
+    # There was a problem with the expected username or hostname! uh oh!
+    else
+        echo -n ' %B%F{red}' # uh oh, there was a hostname problem!
+    fi
+
+    echo -n '%n@%m%b%f'
+}
+
+make_ps1 () {
+    # PS1+='%F{cyan}%D{%_m\/%d %_I:%M:%S %p}%f' # time
+    export PS1=
+    PS1+='%B%F{blue}[%b'                                   # [
+    PS1+='%F{cyan}%D{%_I:%M:%S %p}%f'                      #    time
+    PS1+=' %U%!%u'                                         #    history
+    PS1+='%B%F{blue} |%b%f'                                #    |
+    PS1+=' %(?.%F{green}.%F{red})%?%f'                     #    prev-stat-code
+    if [[ -n $1 ]]; then
+        PS1+=' %F{166}(%j job%2(1j.%(2j.s.).s))%f'         # job count
+        PS1+=' %F{red}SHLVL=%L'                            # shellevel
+    else
+        PS1+='%(1j. %F{166}(%j job%(2j.s.))%f.)'           # [jobs, if more than one]
+        PS1+='%(2L. %F{red}SHLVL=%L.)'                     # [shellevel, if more than 1]
+    fi
+    PS1+='%B%F{blue}]%b%f'                                 # ]
+    PS1+="\$(_samp_shell_ps1_hostname_username $1)"        # user@host, optional
+
+    [[ -n $1 ]] && PS1+='%${samp_shell_ps1_options[pwd_max_len]:-65}>..>' # (limit ~path limit len to ps1_pwd_max_len)
+    PS1+=' %F{11}%~%f'  #                                  # ~path
+    [[ -n $1 ]] && PS1+='%<<'                                             # finish limit
+    PS1+=' %F{043}$(_samp_shell_ps1_git_branch)%f'
+    PS1+='%b %F{8}%#%f '                                   # ending %
+
+    samp_shell_ps1_options[git_branch_pattern]='${samp_shell_ps1_options[git_branch_prefix]}/??-??-??/'
+}
+function _samp_shell_ps1_git_branch {
+    local br=$(git branch --show-current)
+    echo '#'${br#${~${(e)samp_shell_ps1_options[git_branch_pattern]?}}}
+}
+
+function _samp_shell_rps1_git_status {
+    local stat=0
+    git status --porcelain | while IFS= read -r line; do
+        [[ $line[1] == ' ' ]] && (( stat |= 2 ))
+        [[ $line[2] == ' ' ]] && (( stat |= 1 ))
+        [[ $line[1] == '?' || $line[2] == '?' ]] && (( stat |= 4 ))
+    done
+    (( stat & 1 )) && echo -n '*'
+    (( stat & 2 )) && echo -n '+'
+    (( stat & 4 )) && echo -n '?'
+}
+
+make_ps1 show_username=1 
+# export RPS1='%B%F{cyan}$(_samp_shell_rps1_git_status) $(git branch --show-current)%f' # git branch
+
+show_username
+show_username
+expected_username
+expected_hostname
+expected_username
+expected_hostname
