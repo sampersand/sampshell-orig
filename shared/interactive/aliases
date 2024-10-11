@@ -12,3 +12,7 @@ alias '%= ' '$= ' # Make sure an `%`/`$` at the beginning of a line will be igno
 
 alias s=subl
 alias ss=ssubl
+
+
+#### !!!!
+# You can alias variablessssss to be function calls

@@ -1,5 +1,4 @@
 #!/bin/zsh
-source ${0:A:h}/git-old
 
 if false; then
 	# Gets the current branch (ISH---this isn't working)
