@@ -1,17 +1,19 @@
 #!/bin/zsh
-source ${0:A:h}/git-old
 
-if false; then
-	# Gets the current branch (ISH---this isn't working)
-	function git-current-branch () git rev-parse --abbrev-ref HEAD
+# if false; then
+# 	# Gets the current branch (ISH---this isn't working)
+# 	function git-current-branch () git rev-parse --abbrev-ref HEAD
 
-	# Returns zero or nonzero depending on when on if it's in a repo.
-	function is-in-a-git-repo () git rev-parse --is-inside-work-tree >&- 2>&-
-fi
+# 	# Returns zero or nonzero depending on when on if it's in a repo.
+# 	function is-in-a-git-repo () git rev-parse --is-inside-work-tree >&- 2>&-
+# fi
+
 
 ##################
 # Global aliases #
 ##################
+
+alias g=git
 
 for i in {1..10}; do
 	alias -g "@-$i=@{-$i}"
@@ -41,19 +43,56 @@ function git-branch-prefix-pattern () {
 	echo "${(q)_samp_shell_git_options[branch-prefix]?}/??-??-??"
 }
 
-##########################
-# Custom git "functions" #
-##########################
+################################
+# Interacting with remote code #
+################################
+alias gf='git fetch'
+alias gpl='git pull'
+alias gph='git push'
+alias gphf='git push --force'
+gremove-remote () {
+	echo "not tested" && return
+	git branch -d | xargs -L1 git branch -Dr
+}
+
+### Stashing Code
+alias gst='git stash'
+alias gstash=gst
+alias gstp='git stash pop'
+
+
+
+#####################
+# Changing branches #
+#####################
 
 # Create a new branch; date is optional.
 function gnb git-new-branch () {
-	if [[ $# = 0 ]]; then
-		eecho "[date=YY-MM-DD] $0 branch name here"
-		return -1
-	fi
-
+	if [[ $# = 0 ]]; then eecho "[date=YY-MM-DD] $0 branch name here" && return -1; fi
 	git switch --create "$(git-branch-prefix)/${(j:-:)@}"
 }
+
+function gsw () git switch ${@:-'@{-1}'}
+alias gswm='gsw "$(master-branch)"'
+
+alias gbr='git branch'
+
+
+
+
+gdb () {
+	[[ $# = 0 && $1 = '-' ]] && set -- '@{-1}'
+	git branch --delete $@
+}
+
+alias grename='git branch --move'
+alias gbmv=grename
+alias gbrmv=grename
+
+
+##########################
+# Custom git "functions" #
+##########################
 
 # Squash all commits down lightly.
 function gsquash git-squash () {
@@ -94,7 +133,6 @@ function gcm git-commit () git commit ${1+--message} ${(j: :)@}
 # Aliases #
 ###########
 
-alias g=git
 alias gs='git status'
 alias grb='git rebase'
 alias grbm='git rebase "$(master-branch)"'
@@ -113,14 +151,6 @@ alias gnit='git commit --amend --no-edit'
 gcl () { git clone ${1?'must supply a repo'} && cd ${1:t:r} }
 alias gl='git log'
 
-alias gstp='git stash pop'
-alias gst='git stash'
-alias gstash='git stash'
-
-alias gbr='git branch'
-
-function gsw () git switch ${@:-'@{-1}'}
-alias gswm='gsw "$(master-branch)"'
 function gm () git merge ${@:-'@{-1}'}
 alias gmm='gm "$(master-branch)"'
 function gd () git diff ${@:-'@{-1}'}
@@ -128,22 +158,4 @@ alias gdm='gd "$(master-branch)"'
 function gdd () git diff --name-status ${@:-'@{-1}'}
 alias gddm='gdd "$(master-branch)"'
 
-gdb () {
-	[[ $# = 0 && $1 = '-' ]] && set -- '@{-1}'
-	git branch --delete $@
-}
-
-alias grename='git branch --move'
-alias gbmv=grename
-alias gbrmv=grename
-
 # 	# interact with remote
-gremove-remote () {
-	git branch -d | xargs -L1 git branch -Dr
-}
-alias gf='git fetch'
-alias gpl='git pull'
-alias gph='git push'
-alias gphf='git push --force'
-
-# deprecated aliases
