@@ -1,149 +1,223 @@
 #!/bin/zsh
 
-alias g=git
-alias gs='git status'
+##################
+# Global aliases #
+##################
 
-master-branch () {
-	git symbolic-ref refs/remotes/origin/HEAD
+for i in {1..10}; do
+	alias -g "@-$i=@{-$i}"
+done
+
+#######################
+# Helper git commands #
+#######################
+
+typeset -xgA _samp_shell_git_options
+_samp_shell_git_options[default-master-branch]=master
+
+function master-branch (){
+	echo ${"$(git symbolic-ref refs/remotes/origin/HEAD -q || echo ${_samp_shell_git_options[default-master-branch]})":t}
+}
+
+function git-branch-prefix () {
+	local prefix=${_samp_shell_git_options[branch-prefix]?set a branch prefix please}
+	: ${1:=${date:-$(date +%y-%m-%d)}}
+	[[ $1 =~ '([0-9]{2}-){2}[0-9]{2}' ]] || warn "$0: date isn't in the right format: $1"
+	echo $prefix/$1
+}
+
+function git-branch-prefix-pattern () {
+	echo "${(q)_samp_shell_git_options[branch-prefix]?}/??-??-??"
+}
+
+##########################
+# Custom git "functions" #
+##########################
+
+# Create a new branch; date is optional.
+function gnb git-new-branch () {
+	if [[ $# = 0 ]]; then
+		eecho "[date=YY-MM-DD] $0 branch name here"
+		return -1
+	fi
+
+	git switch --create "$(git-branch-prefix)/${(j:-:)@}"
+}
+
+# Squash all commits down lightly.
+function gsquash git-squash () {
+	if [[ $# != 1 ]]; then
+		eecho "$0 <branch-or-commit>"
+		return -1
+	fi
+
+	git reset --soft "$(git merge-base ${1?} HEAD)"
+}
+
+# Fixup code
+function goops git-oops () {
+	git add "${@:---all}" && git commit --amend --no-edit && git push --force
+}
+
+function gclear git-clear () {
+	# git add --all && git stash push && git status
+	echo 'todo'
+}
+
+# Adds everything and prints out the status
+function gaa git-add-all () {
+	git add --all && git status
 }
 
 
-echo $(master-branch)
-# exit
+##################################
+# Extended builtin git functions #
+##################################
 
-###
-# Comitting files
- 
 # Commits untracked files; all arguments are joined with a space.
-function gcm () git commit ${1+--message} ${(j: :)@}
-
-# Gets the difference between the current revision and, by default, `HEAD`. (Note that this is
-# different than how `git diff` normally works; I find this is far more convenient.)
-function gd () git diff ${@:-HEAD}
-function gdm () git diff "$(master-branch)" # Git diff against the master branch.
+function gcm git-commit () git commit ${1+--message} ${(j: :)@}
 
 
 
+###########
+# Aliases #
+###########
+
+alias g=git
+alias gs='git status'
 
 
 
+# ###
+# # Comitting files
+ 
+# # Gets the difference between the current revision and, by default, `HEAD`. (Note that this is
+# # different than how `git diff` normally works; I find this is far more convenient.)
+# function gd () git diff ${@:-HEAD}
+# alias gdm='gd "$(master-branch)"'
 
-if false; then
-	# Gets the current branch (ISH---this isn't working)
-	function git-current-branch () git rev-parse --abbrev-ref HEAD
+# alias grb='git rebase' # Shorthand alias
+# alias grbm='grb "$(master-branch)"'
 
-	# Returns zero or nonzero depending on when on if it's in a repo.
-	function is-in-a-git-repo () git rev-parse --is-inside-work-tree >&- 2>&-
-fi
+# ###################
+# #	
+# ###################
+
+# ### Modifying tracked & untracked files
+# alias ga='git add'
+
+# alias grs='git reset'
+# alias greset=grs
+# alias grm='git rm'
+# alias gco='git checkout'
+
+# if false; then
+# 	# Gets the current branch (ISH---this isn't working)
+# 	function git-current-branch () git rev-parse --abbrev-ref HEAD
+
+# 	# Returns zero or nonzero depending on when on if it's in a repo.
+# 	function is-in-a-git-repo () git rev-parse --is-inside-work-tree >&- 2>&-
+# fi
 
 
-if false; then
-	#!/bin/zsh
+# if false; then
+# 	#!/bin/zsh
 
-	#############################
-	# Git Commands & Shorthands #
-	#############################
+# 	#############################
+# 	# Git Commands & Shorthands #
+# 	#############################
 
-	# Shorthand alias
-	alias grb='git rebase'
 
-	#misc
-	alias gch='git checkout'
-	alias gcp='git cherry-pick'
-	alias gg='git grep'
+# 	#misc
+# 	alias gch='git checkout'
+# 	alias gcp='git cherry-pick'
+# 	alias gg='git grep'
 
-	# working area
-	alias ginit='git init'
-	gcl () {
-		git clone ${1?'must supply a repo'} && cd ${1:t:r}
-	}
+# 	# working area
+# 	alias ginit='git init'
+# 	gcl () {
+# 		git clone ${1?'must supply a repo'} && cd ${1:t:r}
+# 	}
 
-	# modifying tracked & untracked files
-	alias ga='git add'
-	alias grs='git reset'
-	alias greset=grs
-	alias grm='git rm'
-	alias gco='git checkout'
+# 	# Adds all the files in a given directory. If an arguments are given, they're taken to be the 
+# 	# commit message (and supplied to `gcm`).
+# 	gaa () {
+# 		git add --all || return
+# 		[[ $# = 0 ]] || gcm $@ # commit if a message is given
+# 		git status
+# 	}
 
-	# Adds all the files in a given directory. If an arguments are given, they're taken to be the 
-	# commit message (and supplied to `gcm`).
-	gaa () {
-		git add --all || return
-		[[ $# = 0 ]] || gcm $@ # commit if a message is given
-		git status
-	}
+# 	# "Oopsies I messed up my PR!" --- Adds all the changed files (or whatever's given on the command
+# 	# line), amends them to the current commit, and force pushes.
+# 	goops () {
+# 		git add "${@:---all}" && git commit --amend --no-edit && git push --force
+# 	}
 
-	# "Oopsies I messed up my PR!" --- Adds all the changed files (or whatever's given on the command
-	# line), amends them to the current commit, and force pushes.
-	goops () {
-		git add "${@:---all}" && git commit --amend --no-edit && git push --force
-	}
+# 	gclear () {
+# 		git add --all && git stash push && git status
+# 	}
 
-	gclear () {
-		git add --all && git stash push && git status
-	}
+# 	#########################
+# 	# Interact with Commits #
+# 	#########################
 
-	#########################
-	# Interact with Commits #
-	#########################
+# 	# Amends the current commit with the current changes.
+# 	alias gnit='git commit --amend --no-edit'
 
-	# Amends the current commit with the current changes.
-	alias gnit='git commit --amend --no-edit'
+# 	#########################
+# 	# Interact with History #
+# 	#########################
+# 	alias gl='git log'
+# 	alias gsp='git stash pop'
+# 	alias gstash='git stash'
 
-	#########################
-	# Interact with History #
-	#########################
-	alias gl='git log'
-	alias gsp='git stash pop'
-	alias gstash='git stash'
+# 	# It's a bit of a pain to type to type the braces, so this is a shorthand.
+# 	for i in {1..10}; do
+# 		alias -g "@-$i=@{-$i}"
+# 	done
 
-	# It's a bit of a pain to type to type the braces, so this is a shorthand.
-	for i in {1..10}; do
-		alias -g "@-$i=@{-$i}"
-	done
+# 	# interact with branches
+# 	alias gbr='git branch'
 
-	# interact with branches
-	alias gbr='git branch'
+# 	gsw () git switch "${@:-"@{-1}"}"
+# 	gswm () git switch "$(master-branch)"
 
-	gsw () git switch "${@:-"@{-1}"}"
-	gswm () git switch "$(master-branch)"
+# 	gm () git merge "${@:-"@{-1}"}"
+# 	gmm () git merge "$(master-branch)"
 
-	gm () git merge "${@:-"@{-1}"}"
-	gmm () git merge "$(master-branch)"
+# 	gnb () {
+# 		if [[ $# = 0 ]]; then
+# 			eecho 'missing branch name'
+# 			return 1
+# 		fi
 
-	gnb () {
-		if [[ $# = 0 ]]; then
-			eecho 'missing branch name'
-			return 1
-		fi
+# 		git switch --create "${__SU_GIT_BRANCH_PREFIX?}/$(date +%y-%m-%d)/${(j:-:)@}"
+# 	}
 
-		git switch --create "${__SU_GIT_BRANCH_PREFIX?}/$(date +%y-%m-%d)/${(j:-:)@}"
-	}
+# 	gdb () {
+# 		[[ $# = 0 && $1 = '-' ]] && set -- '@{-1}'
+# 		git branch --delete $@
+# 	}
 
-	gdb () {
-		[[ $# = 0 && $1 = '-' ]] && set -- '@{-1}'
-		git branch --delete $@
-	}
+# 	alias grename='git branch --move'
+# 	alias gbmv=grename
+# 	alias gbrmv=grename
 
-	alias grename='git branch --move'
-	alias gbmv=grename
-	alias gbrmv=grename
+# 	gsquash () {
+# 		git reset --soft "$(git merge-base ${1-"$(master-branch)"} HEAD)"
+# 	}
 
-	gsquash () {
-		git reset --soft "$(git merge-base ${1-"$(master-branch)"} HEAD)"
-	}
+# 	# interact with remote
+# 	gremove-remote () {
+# 		git branch -d | xargs -L1 git branch -Dr
+# 	}
+# 	alias gf='git fetch'
+# 	alias gpl='git pull'
+# 	alias gph='git push'
+# 	alias gphf='git push --force'
 
-	# interact with remote
-	gremove-remote () {
-		git branch -d | xargs -L1 git branch -Dr
-	}
-	alias gf='git fetch'
-	alias gpl='git pull'
-	alias gph='git push'
-	alias gphf='git push --force'
-
-	# deprecated aliases
-	alias gfetch=gf
-	alias gpull=gpl
-	alias gpush=gph
-fi
+# 	# deprecated aliases
+# 	alias gfetch=gf
+# 	alias gpull=gpl
+# 	alias gpush=gph
+# fi

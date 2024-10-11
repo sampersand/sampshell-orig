@@ -5,10 +5,10 @@ trash_dir="${_samp_shell_trash_dir:-"$HOME/.Trash/.samp-shell-trash"}"
 if [ "$1" = -- ]; then
 	shift
 elif [ "$1" = -h ] || [ "$1" = --help ]; then
-	echo "usage: $0 ... files"
-	echo "  Moves files to the trash, possibly renaming them. The trash dir is"
-	echo "  controlled by the variable '_samp_shell_trash_dir', or defaults"
-	echo "  to $(printf %q "$trash_dir")"
+	eecho "usage: $0 ... files"
+	eecho "  Moves files to the trash, possibly renaming them. The trash dir is"
+	eecho "  controlled by the variable '_samp_shell_trash_dir', or defaults"
+	eecho "  to $(printf %q "$trash_dir")"
 	exit -1
 fi
 
