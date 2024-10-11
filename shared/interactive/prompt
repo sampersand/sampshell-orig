@@ -29,19 +29,21 @@ function _samp_shell_ps1_hostname_username () {
 
 
 function _samp_shell_ps1_git_branch {
-    local br=$(git branch --show-current)
+    local br=$(git branch --show-current 2>&-)
 
     if [[ $1 = 1 ]]; then
-        echo $br
+        echo ' '${br:-'%F{red}(no branch)%f'}
+    elif [[ -z $br ]]; then
+        return
     else
-        echo '#'${br#${~${(e)2}}}
+        echo ' #'${br#${~${(e)2}}}
     fi
 }
 
 function _samp_shell_rps1_git_status {
     local stat=0
     local line
-    git status --porcelain | while IFS= read -r line; do
+    git status --porcelain 2>&- | while IFS= read -r line; do
         [[ $line[1] == ' ' ]] && (( stat |= 2 ))
         [[ $line[2] == ' ' ]] && (( stat |= 1 ))
         [[ $line[1] == '?' || $line[2] == '?' ]] && (( stat |= 4 ))
@@ -52,19 +54,20 @@ function _samp_shell_rps1_git_status {
     # TODO: rebasing and stuff
 }
 
-function make-ps1 {
+function make-prompt {
     local -A opts=(
         --pwd-max-len 65
         --branch-pattern '[[:alnum:]]##/??-??-??/'
     )
 
-    zparseopts -F -K -A opts \
-        {h,-help}       \
-        {a,-all}        \
-        -pwd-max-len:   \
-        {-l,-show-login-info}:  \
-        {U,-user,-username}:: \
-        {H,-host,-hostname}::
+    zparseopts -F -K -A opts  \
+        {h,-help}             \
+        {a,-all}              \
+        -pwd-max-len:         \
+        {l,-show-login-info}: \
+        {U,-user,-username}:  \
+        {H,-host,-hostname}:  \
+        -branch-pattern:      \
 
     if [[ $+opts[-h] = 1 || $+opts[--help] = 1 ]]; then
         echo "usage: $0 [options]"
@@ -74,7 +77,7 @@ function make-ps1 {
         echo "     --pwd-max-len=LEN        max len for the pwd; defaults to $opts[--pwd-max-len]"
         echo '  -l,--show-login-info={0,1}  when 1, always show login info; when 0, never'
         echo '  -U,--user,--username=NAME   username to match against' # can use `whoami`
-        echo '  -H,--host,--hostname=NAME    hostname to match against' # can use `hostname -s`
+        echo '  -H,--host,--hostname=NAME   hostname to match against' # can use `hostname -s`
         echo "     --branch-pattern=PAT     branch prefix pattern; default: ${opts[--branch-pattern]}"
         echo
         echo "If --login-info is empty, then the login username and hostname of the machine"
@@ -123,7 +126,7 @@ function make-ps1 {
     [[ $pathlen != 0 ]] && PS1+='%<<'
 
     # Add git branch in
-    PS1+=" %F{043}\$(_samp_shell_ps1_git_branch $all ${(q)opts[--branch-pattern]})%f"        # git branch
+    PS1+="%F{043}\$(_samp_shell_ps1_git_branch $all ${(q)opts[--branch-pattern]})%f"        # git branch
 
     # git status
     PS1+='$(_samp_shell_rps1_git_status)'
@@ -137,4 +140,5 @@ function make-ps1 {
     PS1+='%#%f '                                   # ending %
 }
 
-make-ps1
+alias make-ps1=make-prompt
+make-prompt

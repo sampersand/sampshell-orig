@@ -39,3 +39,6 @@ function parallelize-it () {
 		shift
 	done
 }
+
+## Aliases
+alias j=jobs
