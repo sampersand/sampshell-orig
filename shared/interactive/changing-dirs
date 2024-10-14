@@ -38,4 +38,3 @@ alias ....='cd ../../..'
 add-named-dir ~/me
 add-named-dir ~/tmp
 add-named-dir shell $samp_shell_shared_home
-[[ $VENDOR == apple ]] && add-named-dir trash ~/.Trash/.samp-shell-trash

@@ -16,5 +16,4 @@ fi
 # Pastes the pasteboard
 alias pbp=pbpaste
 
-
 # TODO: caffeinate things

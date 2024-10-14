@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+if [[ -z $samp_shell_trash_dir ]]; then
+	samp_shell_trash_dir=~/.Trash/.samp-shell-trash
+fi
+
+if [[ ! -e $samp_shell_trash_dir ]]; then
+	mkdir -p $samp_shell_trash_dir
+fi
+
+## Adds sampshell's `trash` to the list of named trashes
+add-named-dir trash $samp_shell_trash_dir
+
