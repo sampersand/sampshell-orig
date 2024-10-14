@@ -6,6 +6,9 @@ function nargs () echo $#
 # I frequently use this.
 export words=/usr/share/dict/words
 
-#!/bin/zsh
-
 alias grep='grep --color=auto'
+
+function reload reload-samp-shell () {
+	source $samp_shell_shared_home/${1:-.zshrc}
+	echo "Reloaded $_"
+}

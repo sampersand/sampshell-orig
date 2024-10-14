@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# Experimental options i'm working on
+## Experimental options i'm working on
 if [[ -z $samp_shell_experimental ]]; then
 	return
 fi

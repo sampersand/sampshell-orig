@@ -22,15 +22,20 @@ function add-named-dir () {
 
 	builtin hash -d $name=$dir
 }
-
 function del-named-dir () builtin unhash -d ${1:-${PWD:t}}
 function dirs () builtin dirs ${@:--v} 
 
 ## Cd aliases
 function cdd () cd ${@:h} # Changes to the dirname of a file
-function cdme () mkdircd ~me
-function cdtmp () mkdircd ~tmp # Changes to the user's temporary directory; if it doesn't exist, it's created.
-
+alias cdme='mkdircd ~me'
+alias cdtmp='mkdircd ~tmp'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+
+
+## Add the builtin named directories
+add-named-dir ~/me
+add-named-dir ~/tmp
+add-named-dir shell $samp_shell_shared_home
+[[ $VENDOR == apple ]] && add-named-dir trash ~/.Trash/.samp-shell-trash
