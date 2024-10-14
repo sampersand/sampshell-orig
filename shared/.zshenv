@@ -1,14 +1,19 @@
+#!/bin/zsh
+
 #############################################################################
 # Shell options that are used by both scripts and interactive zsh instances #
 #############################################################################
 
-setopt EXTENDED_GLOB     # Extra globbing features!
-setopt BRACE_CCL         # `{abc0-3}` is  `0 1 2 3 a b c`
-setopt GLOB_STAR_SHORT   # `**.c` is a shorthand for `**/*.c`
+: ${samp_shell_shared_home:=${0:A:h}}
+export samp_shell_shared_home
 
-export PATH=${0:A:h}/bin:$PATH # Add shared commands to the $PATH
+setopt EXTENDED_GLOB   # Extra globbing features!
+setopt BRACE_CCL       # `{abc0-3}` is  `0 1 2 3 a b c`
+setopt GLOB_STAR_SHORT # `**.c` is a shorthand for `**/*.c`
+
+export path=($samp_shell_shared_home/bin $path)
 
 ## Load other files
-for file in ${0:A:h}/both/*; do
+for file in $samp_shell_shared_home/both/*; do
 	source $file
 done

@@ -9,13 +9,14 @@
 # fi
 
 ## Load other files
-for file in ${0:A:h}/interactive/*; do
+for file in $samp_shell_shared_home/interactive/*; do
 	source $file
 done
 
+source $samp_shell_shared_home/experimental.zsh
+
 return
 
-source ${0:A:h}/experimental.zsh
 
 # Source shared and personal `.zshrc`s
 source          $samp_shell_shared_home/shared/.zshrc   # Load required shared zshrc
