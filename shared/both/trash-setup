@@ -9,5 +9,5 @@ if [[ ! -e $samp_shell_trash_dir ]]; then
 fi
 
 ## Adds sampshell's `trash` to the list of named trashes
-add-named-dir trash $samp_shell_trash_dir
+# add-named-dir trash $samp_shell_trash_dir
 

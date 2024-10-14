@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+## Add the builtin named directories
+samp_shell_temp_dir
+
+[[ -e ~/me ]] && add-named-dir ~/me
+[[ -e ~/tmp ]] && add-named-dir ~/tmp
+[[ -e $samp_shell_shared_home ]] && add-named-dir shell $samp_shell_shared_home
+[[ -e $samp_shell_trash_dir ]] && add-named-dir trash $samp_shell_trash_dir
+
+alias cdme='mkdircd ~me'
+alias cdtmp='mkdircd ~tmp'
+
+## Initialize the prompt
+make-prompt
+

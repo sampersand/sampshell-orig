@@ -11,3 +11,7 @@ done
 
 ## Load experimental changes
 source $samp_shell_shared_home/experimental.zsh
+
+for file in $samp_shell_shared_home/setup/*; do
+	source $file
+done

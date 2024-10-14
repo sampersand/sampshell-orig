@@ -27,14 +27,7 @@ function dirs () builtin dirs ${@:--v}
 
 ## Cd aliases
 function cdd () cd ${@:h} # Changes to the dirname of a file
-alias cdme='mkdircd ~me'
-alias cdtmp='mkdircd ~tmp'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-
-## Add the builtin named directories
-add-named-dir ~/me
-add-named-dir ~/tmp
-add-named-dir shell $samp_shell_shared_home

@@ -19,35 +19,7 @@ alias gti=git
 alias sbul=subl
 alias ssbul=ssubl
 
-
 ## under-used, but still want them
 alias pwc='current-commit'
 alias pwb='current-branch'
 alias mbr='master-branch'
-
-
-#### !!!!
-# You can alias variablessssss to be function calls
-
-
-# experimental
-alias -g '$pwc="$(current-commit)"'
-alias -g '$pwb="$(current-branch)"'
-alias -g '$mbr="$(master-branch)"'
-
-# OLD global aliases i used to use, but now no longer.
-if false; then
-	alias -g 'T=| tail'
-	alias -g 'TN=| tail -n'
-	alias -g 'T1=| tail -n 1'
-	alias -g 'H=| head'
-	alias -g 'HN=| head -n'
-	alias -g 'H1=| head -n 1'
-
-	alias -g 'WC=| wc'
-	alias -g 'WCL=| wc -l'
-	alias -g 'GR=| grep --'
-	alias -g 'GRR=| grep'
-
-	alias -g 'NERR=2>&-'
-fi
