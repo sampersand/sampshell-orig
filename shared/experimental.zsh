@@ -5,6 +5,8 @@ if [[ -z $samp_shell_experimental ]]; then
 	return
 fi
 
+echo '(enabling experimental samp-shell options)'
+
 setopt WARN_CREATE_GLOBAL # warn when accidentally creating global variables
 setopt WARN_NESTED_VAR    # same with nested locals
 

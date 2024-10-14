@@ -9,6 +9,7 @@ export words=/usr/share/dict/words
 alias grep='grep --color=auto'
 
 function reload reload-samp-shell () {
-	source $samp_shell_shared_home/${1:-.zshrc}
-	echo "Reloaded $_"
+	local file_to_reload=$samp_shell_shared_home/${1:-.zshrc}
+	source $file_to_reload
+	echo "Reloaded $file_to_reload"
 }
