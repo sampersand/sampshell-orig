@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export samp_shell_home=${0:A:h} # Root folder for the samp shell.
+export samp_shell_home=${0:P:h} # Root folder for the samp shell.
 
 if [[ -n $samp_shell_experimental ]]; then
 	setopt WARN_CREATE_GLOBAL # warn when accidentally creating global variables
