@@ -1,10 +1,6 @@
-#!/bin/sh
+#!/bin/zsh
 
 # Opens the supplied files in Sublime Text. If no files are given, defaults to the 
 # current directory.
 
-if [ $# = 0 ]; then
-	set -- .
-fi
-
-open -a "${_samp_shell_editor:-sublime4}" -- "$@"
+open -a ${SAMP_SHELL_EDITOR:-TextEdit} -- ${@:-.}

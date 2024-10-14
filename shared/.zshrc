@@ -5,13 +5,13 @@
 #################################################################
 
 ## Load other script files
-for file in $samp_shell_shared_home/interactive/*; do
+for file in $SAMP_SHELL_SHARED_HOME/interactive/*; do
 	source $file
 done
 
 ## Load experimental changes
-source $samp_shell_shared_home/experimental.zsh
+source $SAMP_SHELL_SHARED_HOME/experimental.zsh
 
-for file in $samp_shell_shared_home/setup/*; do
+for file in $SAMP_SHELL_SHARED_HOME/setup/*; do
 	source $file
 done

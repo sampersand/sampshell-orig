@@ -1,12 +1,14 @@
 #!/bin/zsh
 
+export SAMP_SHELL_EDITOR=sublime4
+
 ## Add the builtin named directories
-samp_shell_temp_dir
+# samp_shell_temp_dir
 
 [[ -e ~/me ]] && add-named-dir ~/me
 [[ -e ~/tmp ]] && add-named-dir ~/tmp
-[[ -e $samp_shell_shared_home ]] && add-named-dir shell $samp_shell_shared_home
-[[ -e $samp_shell_trash_dir ]] && add-named-dir trash $samp_shell_trash_dir
+[[ -e $SAMP_SHELL_SHARED_HOME ]] && add-named-dir shell $SAMP_SHELL_SHARED_HOME
+[[ -e $SAMP_SHELL_TRASH_DIR ]] && add-named-dir trash $SAMP_SHELL_TRASH_DIR
 
 alias cdme='mkdircd ~me'
 alias cdtmp='mkdircd ~tmp'
