@@ -26,11 +26,6 @@ function add-named-dir () {
 function del-named-dir () builtin unhash -d ${1:-${PWD:t}}
 function dirs () builtin dirs ${@:--v} 
 
-## Add the builtin named directories
-add-named-dir ~/me
-add-named-dir ~/tmp
-[[ $VENDOR == apple ]] && add-named-dir trash ~/.Trash/.samp-shell-trash
-
 ## Cd aliases
 function cdd () cd ${@:h} # Changes to the dirname of a file
 function cdme () mkdircd ~me

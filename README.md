@@ -1,6 +1,11 @@
 # sampshell
 My customization to ZSH
 
+# Notes
+the `.zsh{env,rc}` files are where config are setup; the `shared/interactive/*` is just where comands/aliases are registered.
+
+# Fun things
+
 Some fun thigns:
 - you can overload `~[foo]` via the `zsh_directory_name` function
 - `cat =(<<<foo)` --- TODO: what does NULLCMD do?
