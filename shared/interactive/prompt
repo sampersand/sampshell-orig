@@ -8,10 +8,6 @@ setopt PROMPT_SUBST # allows you to use variable substitutions in prompts
 
 alias prp='print -P'
 
-# local -A opts
-# # opts[-l]=1
-# opts[--show-login-info]=2
-
 function _samp_shell_ps1_hostname_username () {
     case $1 in
         (0)

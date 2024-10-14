@@ -5,27 +5,28 @@
 #################################################################################
 
 ## Listing files
-alias ls='ls -AhG' # Always print out `.` files, and for longform, human-readable sizes
+alias ls='ls -AhGb' # Always print out `.` files, and for longform, human-readable sizes, and colours
 alias ll='ls -l'   # Shorthand for `ls -al`
+
+## Creating files
+alias touchd='mkdir -p' # alias incase i ever end up using it
 
 function ttouch () for file; do  # Same as `touch`, except it will create directories as needed.
 	mkdir -p $file:h && touch $file
 done
 
-# Same as `mkdir`, except you also cd to the newly-created directory
+## Creating Folders (& cding to them)
 function mkdircd () { mkdir -p $@ && cd $@ }
 alias cdmkdir=mkdircd
 alias cdm=mkdircd
+function mkd () mkdir -p $@
+function mkf () { mkdir -p ${@:h} && command touch $@ }
 
-alias touchd='mkdir -p' # alias incase i ever end up using it
-
-##################
-# Deleting Stuff #
-##################
+## Symlinks
 function symlink () {
 	ln -s ${1?need existing file name} ${2?need name of destination}
 }
 
-## making stuff
-function mkd () mkdir -p $@
-function mkf () { mkdir -p ${@:h} && command touch $@ }
+## Deleting files
+alias purge='command rm -riP' ## Purge deletes something entirely
+alias ppurge='command rm -rfP'

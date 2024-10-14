@@ -25,10 +25,10 @@ alias enablehistory='unset -f zshaddhistory'
 function disable-history () {
 	fc -p
 	unset SAVEHIST HISTFILE
-	echo "disabling history isn't totally working just yet."
-	# SHELL_SESSION_HISTORY=0
+	echo 'History saving disabled.'
 }
 
 function enable-history () {
 	fc -P
+	echo 'History saving enabled.'
 }

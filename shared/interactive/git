@@ -147,6 +147,7 @@ alias gcp='git cherry-pick'
 alias gg='git grep'
 alias ginit='git init'
 alias gnit='git commit --amend --no-edit'
+function gnita () { gaa && gnit }
 
 gcl () { git clone ${1?'must supply a repo'} && cd ${1:t:r} }
 alias gl='git log'

@@ -15,3 +15,6 @@ setopt AUTO_PARAM_KEYS      # The character added after autocomplete can be auto
 setopt AUTO_REMOVE_SLASH    # same with trailing `/`
 
 echo 'todo: autocompletion'
+
+alias cls='printf ''\33c\e[3J'''
+
