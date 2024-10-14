@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-export SAMP_SHELL_EDITOR=sublime4
-
 ## Add the builtin named directories
 # samp_shell_temp_dir
 

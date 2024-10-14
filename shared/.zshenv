@@ -15,6 +15,10 @@ setopt EXTENDED_GLOB   # Extra globbing features!
 setopt BRACE_CCL       # `{abc0-3}` is  `0 1 2 3 a b c`
 setopt GLOB_STAR_SHORT # `**.c` is a shorthand for `**/*.c`
 
+## Load up config variables
+source $SAMP_SHELL_SHARED_HOME/both/config.zsh
+
+
 ## Add source helper functions
 # Same as `source`, except only does it if the file exists.
 function source-optional () for file; do
