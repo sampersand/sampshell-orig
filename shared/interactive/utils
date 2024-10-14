@@ -13,3 +13,5 @@ function reload reload-samp-shell () {
 	source $file_to_reload
 	echo "Reloaded $file_to_reload"
 }
+
+alias clean-zsh='env -i =zsh -f'
