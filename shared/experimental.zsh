@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 ## Experimental options i'm working on
-if [[ -z $samp_shell_experimental ]]; then
+if [[ -z $SAMP_SHELL_EXPERIMENTAL ]]; then
 	return
 fi
 

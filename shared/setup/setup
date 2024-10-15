@@ -4,7 +4,7 @@
 # samp_shell_temp_dir
 
 [[ -e ~/me ]] && add-named-dir ~/me
-[[ -e $SAMP_SHELL_SHARED_HOME ]] && add-named-dir shell $SAMP_SHELL_SHARED_HOME
+[[ -e $SAMP_SHELL_HOME ]] && add-named-dir shell $SAMP_SHELL_HOME
 [[ -e $SAMP_SHELL_TRASH_DIR ]] && add-named-dir trash $SAMP_SHELL_TRASH_DIR
 [[ -e $SAMP_SHELL_TMP_DIR ]] && add-named-dir tmp $SAMP_SHELL_TMP_DIR
 

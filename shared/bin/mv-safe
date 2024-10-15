@@ -1,5 +1,4 @@
-
-# emulate -L zsh
+#!/bin/zsh
 
 if [[ $1 = -- ]]; then
 	shift
