@@ -1,5 +1,17 @@
 #!/bin/zsh
 
-# Source shared and personal `.zshrc`s
-source          ${0:A:h}/shared/.zshrc
-source-optional ${0:A:h}/personal/.zshrc
+#################################################################
+# Shell options that are used by just interactive zsh instances #
+#################################################################
+
+## Load other script files
+for file in $SAMP_SHELL_HOME/interactive/*; do
+	source $file
+done
+
+## Load experimental changes
+source $SAMP_SHELL_HOME/experimental.zsh
+
+for file in $SAMP_SHELL_HOME/setup/*; do
+	source $file
+done

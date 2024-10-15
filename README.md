@@ -2,7 +2,7 @@
 My customization to ZSH
 
 # Notes
-the `.zsh{env,rc}` files are where config are setup; the `shared/interactive/*` is just where comands/aliases are registered.
+the `.zsh{env,rc}` files are where config are setup; the `interactive/*` is just where comands/aliases are registered.
 
 # Fun things
 
