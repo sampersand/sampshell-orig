@@ -1,11 +1,14 @@
+autoload -U bracketed-paste-url-magic; zle -N bracketed-paste bracketed-paste-url-magic
 # sampshell
 My customization to ZSH
+
 
 # Notes
 the `.zsh{env,rc}` files are where config are setup; the `interactive/*` is just where comands/aliases are registered.
 
 # Fun things
 
+- pattern matching! `(#s)` and `(#e)` are beginning and end of line
 Some fun thigns:
 - you can overload `~[foo]` via the `zsh_directory_name` function
 - `cat =(<<<foo)` --- TODO: what does NULLCMD do?

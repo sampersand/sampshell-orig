@@ -1,18 +1,22 @@
 #!/bin/zsh
 
 # Prints out how many arguments were passed; used in testing expansion syntax.
-function nargs () echo $#
+function nargs () {
+	echo $#
+}
 
 # I frequently use this.
-export words=/usr/share/dict/words
+export SAMP_SHELL_WORDS=${SAMP_SHELL_WORDS:-/usr/share/dict/words}
+[[ -v words ]] || export words=$SAMP_SHELL_WORDS
 
 alias grep='grep --color=auto'
 
-function reload reload-samp-shell () {
+function reload-samp-shell () {
 	local file_to_reload=$SAMP_SHELL_HOME/${1:-.zshrc}
 	source $file_to_reload
 	echo "Reloaded $file_to_reload"
 }
+does-function-exist reload || alias reload=reload-samp-shell
 
 alias clean-zsh='env -i =zsh -f'
 

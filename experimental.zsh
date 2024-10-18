@@ -1,10 +1,5 @@
 #!/bin/zsh
 
-## Experimental options i'm working on
-if [[ -z $SAMP_SHELL_EXPERIMENTAL ]]; then
-	return
-fi
-
 echo '(enabling experimental samp-shell options)'
 
 setopt WARN_CREATE_GLOBAL # warn when accidentally creating global variables
